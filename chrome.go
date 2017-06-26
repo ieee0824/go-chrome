@@ -137,15 +137,11 @@ func (c *Chrome) startChrome() error {
 
 func (c *Chrome) stopChrome() error {
 	if USE_DOCKER_CHROME {
-		fmt.Println(c.chromeContainerID)
-		err := exec.Command(
+		exec.Command(
 			"docker",
 			"kill",
 			c.chromeContainerID[:12],
 		).Run()
-		if err != nil {
-			log.Println(err)
-		}
 		c.debugger = nil
 		c.chromeContainerID = ""
 		c.remotePort = nil
