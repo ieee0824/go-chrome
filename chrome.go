@@ -42,9 +42,6 @@ func init(){
 	}
 
 	switch runtime.GOOS {
-	case "windows":
-		CHROME_PATH = getenv.String("CHROME_PATH", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe")
-		USER_DIRECTORY = getenv.String("USER_DIRECTORY", "C:\\temp\\")
 	case "darwin":
 		CHROME_PATH = getenv.String("CHROME_PATH", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
 		USER_DIRECTORY = getenv.String("USER_DIRECTORY", "/tmp/")
