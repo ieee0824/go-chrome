@@ -23,6 +23,7 @@ var (
 	DUMMY_RUN_SCRIPT_PATH string
 	CHROME_PATH string
 	USER_DIRECTORY string
+	HEADLESS bool
 )
 
 func init(){
@@ -36,6 +37,7 @@ func init(){
 
 	USE_DOCKER_CHROME = getenv.Bool("USE_DOCKER_CHROME", true)
 	DEFAULT_USER_AGENT = getenv.String("DEFAULT_USER_AGENT", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:55.0) Gecko/20100101 Firefox/55.0")
+	HEADLESS = getenv.Bool("HEADLESS", true)
 
 	if err := generateDummyRunScript(); err != nil {
 		panic(err)
@@ -130,7 +132,10 @@ func (c *Chrome) startDockerChrome() error {
 
 func (c *Chrome) startChrome() error {
 	debugger := gcd.NewChromeDebugger()
-	debugger.AddFlags([]string{"-headless", "--disable-gpu", fmt.Sprintf("--user-agent=%s", c.getUserAgent())})
+	if HEADLESS {
+		debugger.AddFlags([]string{"--headless"})
+	}
+	debugger.AddFlags([]string{"--disable-gpu", fmt.Sprintf("--user-agent=%s", c.getUserAgent())})
 	port := getPort()
 	c.remotePort = &port
 
