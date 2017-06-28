@@ -214,7 +214,7 @@ func (c *Chrome) Get(u string) (r io.Reader, err error) {
 	}
 
 	page := target.Page
-	page.Navigate(u, "")
+	page.Navigate(u, "", "")
 	page.Enable()
 	time.Sleep(1 * time.Second)
 
