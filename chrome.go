@@ -83,6 +83,8 @@ func getPort() int {
 
 type Chrome struct {
 	UserAgent string
+	userAgentGenerator *func(string)string
+	Mode string
 	remotePort *int
 	debugger *gcd.Gcd
 	chromeContainerID string
@@ -91,7 +93,20 @@ type Chrome struct {
 func New()*Chrome{
 	return &Chrome{
 		UserAgent: DEFAULT_USER_AGENT,
+		Mode: "pc",
 	}
+}
+
+func (c *Chrome)SetUserAgentGenerator (f func(string)string) *Chrome {
+	c.userAgentGenerator = &f
+	return c
+}
+
+func (c *Chrome) getUserAgent() string {
+	if c.userAgentGenerator == nil {
+		return c.UserAgent
+	}
+	return (*c.userAgentGenerator)(c.Mode)
 }
 
 func (c *Chrome) startDockerChrome() error {
@@ -104,7 +119,7 @@ func (c *Chrome) startDockerChrome() error {
 		"-p",
 		fmt.Sprintf("%v:%v", *c.remotePort, *c.remotePort),
 		"ieee0824/chrome:latest",
-		fmt.Sprintf("--user-agent=%v", c.UserAgent),
+		fmt.Sprintf("--user-agent=%v", c.getUserAgent()),
 		fmt.Sprintf("--remote-debugging-port=%v", *c.remotePort),
 	).Output()
 	if err != nil {
@@ -116,6 +131,7 @@ func (c *Chrome) startDockerChrome() error {
 
 func (c *Chrome) startChrome() error {
 	debugger := gcd.NewChromeDebugger()
+	debugger.AddFlags([]string{"-headless", "--disable-gpu", fmt.Sprintf("--user-agent=%s", c.getUserAgent())})
 	port := getPort()
 	c.remotePort = &port
 
@@ -127,6 +143,17 @@ func (c *Chrome) startChrome() error {
 		debugger.StartProcess(DUMMY_RUN_SCRIPT_PATH, USER_DIRECTORY, fmt.Sprintf("%v", port))
 	} else {
 		debugger.StartProcess(CHROME_PATH, USER_DIRECTORY, fmt.Sprintf("%v", port))
+		targets, err := debugger.GetTargets()
+		if err != nil {
+			return err
+		}
+		for _, target := range targets {
+			err := debugger.CloseTab(target)
+			if err != nil {
+				debugger.ExitProcess()
+				return err
+			}
+		}
 	}
 
 	c.debugger = debugger
@@ -185,6 +212,7 @@ func (c *Chrome) Get(u string) (r io.Reader, err error) {
 		log.Println()
 		return nil, err
 	}
+
 	page := target.Page
 	page.Navigate(u, "")
 	page.Enable()
