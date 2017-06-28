@@ -24,6 +24,7 @@ var (
 	CHROME_PATH string
 	USER_DIRECTORY string
 	HEADLESS bool
+	DELAY_TIME time.Duration
 )
 
 func init(){
@@ -38,6 +39,7 @@ func init(){
 	USE_DOCKER_CHROME = getenv.Bool("USE_DOCKER_CHROME", true)
 	DEFAULT_USER_AGENT = getenv.String("DEFAULT_USER_AGENT", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:55.0) Gecko/20100101 Firefox/55.0")
 	HEADLESS = getenv.Bool("HEADLESS", true)
+	DELAY_TIME = getenv.Duration("DELAY_TIME", 1*time.Second)
 
 	if err := generateDummyRunScript(); err != nil {
 		panic(err)
@@ -217,7 +219,7 @@ func (c *Chrome) Get(u string) (r io.Reader, err error) {
 	page := target.Page
 	page.Navigate(u, "", "")
 	page.Enable()
-	time.Sleep(1 * time.Second)
+	time.Sleep(DELAY_TIME)
 
 	dom := target.DOM
 	dom.GetDocument(-1, true)
