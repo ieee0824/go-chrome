@@ -17,13 +17,13 @@
   branch = "master"
   name = "github.com/wirepair/gcd"
   packages = [".","gcdapi","gcdmessage"]
-  revision = "f77264f9c13ed9a64d5575cda55baec73477f6ab"
+  revision = "ff9f0ca5e31a19ee9862a6aa427f4019233c78ab"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["websocket"]
-  revision = "59a0b19b5533c7977ddeb86b017bf507ed407b12"
+  revision = "455220fa52c866a8aa14ff5e8cc68cde16b8395e"
 
 [solve-meta]
   analyzer-name = "dep"
