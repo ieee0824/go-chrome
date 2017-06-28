@@ -97,9 +97,8 @@ func New()*Chrome{
 	}
 }
 
-func (c *Chrome)SetUserAgentGenerator (f func(string)string) *Chrome {
+func (c *Chrome)SetUserAgentGenerator (f func(string)string) {
 	c.userAgentGenerator = &f
-	return c
 }
 
 func (c *Chrome) getUserAgent() string {
@@ -183,19 +182,16 @@ func (c *Chrome) stopChrome() error {
 	return nil
 }
 
-func (c *Chrome) UseSpMode() *Chrome {
+func (c *Chrome) UseSpMode() {
 	c.UserAgent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Mobile Safari/537.36"
-	return c
 }
 
-func (c *Chrome) UsePcMode() *Chrome {
+func (c *Chrome) UsePcMode() {
 	c.UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
-	return c
 }
 
-func (c *Chrome) SetUserAgent(ua string) *Chrome {
+func (c *Chrome) SetUserAgent(ua string) {
 	c.UserAgent = ua
-	return c
 }
 
 func (c *Chrome) GetUserAgent() string {
