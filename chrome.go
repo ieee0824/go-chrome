@@ -17,8 +17,6 @@ import (
 	"log"
 )
 
-const CHROME_RUN_SCRIPT_BASE = "#!/bin/sh\n%v --headless --disable-gpu --remote-debugging-address=0.0.0.0 --user-agent=%v --remote-debugging-port=%v"
-
 var (
 	USE_DOCKER_CHROME bool
 	DEFAULT_USER_AGENT string
