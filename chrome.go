@@ -12,9 +12,8 @@ import (
 	"github.com/wirepair/gcd"
 	"os/exec"
 	"time"
-	"io"
-	"strings"
 	"log"
+	"bytes"
 )
 
 var (
@@ -205,7 +204,7 @@ func (c *Chrome) GetUserAgent() string {
 	return c.UserAgent
 }
 
-func (c *Chrome) Get(u string) (r io.Reader, err error) {
+func (c *Chrome) Get(u string) (reader *bytes.Reader, err error) {
 	if err != c.startChrome() {
 		log.Println()
 		return nil, err
@@ -238,5 +237,5 @@ func (c *Chrome) Get(u string) (r io.Reader, err error) {
 		return nil, err
 	}
 
-	return strings.NewReader(h), nil
+	return bytes.NewReader([]byte(h)), nil
 }
