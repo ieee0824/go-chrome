@@ -152,7 +152,6 @@ func (c *Chrome) startChrome() error {
 	}
 
 	if c.proxyServer != nil {
-		fmt.Println(DEFAULT_PROXY_SERVER)
 		debugger.AddFlags([]string{fmt.Sprintf("--proxy-server=%v", *c.proxyServer)})
 	}
 
