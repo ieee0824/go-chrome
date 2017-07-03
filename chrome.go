@@ -24,6 +24,7 @@ var (
 	USER_DIRECTORY string
 	HEADLESS bool
 	DELAY_TIME time.Duration
+	DEFAULT_PROXY_SERVER string
 )
 
 func init(){
@@ -39,6 +40,7 @@ func init(){
 	DEFAULT_USER_AGENT = getenv.String("DEFAULT_USER_AGENT", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:55.0) Gecko/20100101 Firefox/55.0")
 	HEADLESS = getenv.Bool("HEADLESS", true)
 	DELAY_TIME = getenv.Duration("DELAY_TIME", 1*time.Second)
+	DEFAULT_PROXY_SERVER = getenv.String("DEFAULT_PROXY_SERVER")
 
 	if err := generateDummyRunScript(); err != nil {
 		panic(err)
@@ -91,17 +93,29 @@ type Chrome struct {
 	remotePort *int
 	debugger *gcd.Gcd
 	chromeContainerID string
+	proxyServer *string
 }
 
 func New()*Chrome{
+	var proxy = &DEFAULT_PROXY_SERVER
+	if DEFAULT_PROXY_SERVER == "" {
+		proxy = nil
+	}
+
+
 	return &Chrome{
 		UserAgent: DEFAULT_USER_AGENT,
 		Mode: "pc",
+		proxyServer: proxy,
 	}
 }
 
 func (c *Chrome)SetUserAgentGenerator (f func(string)string) {
 	c.userAgentGenerator = &f
+}
+
+func (c *Chrome)SetProxyServer (s string) {
+	c.proxyServer = &s
 }
 
 func (c *Chrome) getUserAgent() string {
@@ -136,6 +150,12 @@ func (c *Chrome) startChrome() error {
 	if HEADLESS {
 		debugger.AddFlags([]string{"--headless"})
 	}
+
+	if c.proxyServer != nil {
+		fmt.Println(DEFAULT_PROXY_SERVER)
+		debugger.AddFlags([]string{fmt.Sprintf("--proxy-server=%v", *c.proxyServer)})
+	}
+
 	debugger.AddFlags([]string{"--disable-gpu", fmt.Sprintf("--user-agent=%s", c.getUserAgent())})
 	port := getPort()
 	c.remotePort = &port
