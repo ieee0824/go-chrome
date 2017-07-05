@@ -126,8 +126,7 @@ func (c *Chrome) getUserAgent() string {
 }
 
 func (c *Chrome) startDockerChrome() error {
-	out, err := exec.Command(
-		"docker",
+	args := []string{
 		"run",
 		"-d",
 		"--rm",
@@ -137,6 +136,13 @@ func (c *Chrome) startDockerChrome() error {
 		"ieee0824/chrome:latest",
 		fmt.Sprintf("--user-agent=%v", c.getUserAgent()),
 		fmt.Sprintf("--remote-debugging-port=%v", *c.remotePort),
+	}
+	if c.proxyServer != nil {
+		args = append(args, fmt.Sprintf("--proxy-server=%v", *c.proxyServer))
+	}
+	out, err := exec.Command(
+		"docker",
+		args...
 	).Output()
 	if err != nil {
 		return err
