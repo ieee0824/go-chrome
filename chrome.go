@@ -1,33 +1,34 @@
 package chrome
 
 import (
-	"github.com/joho/godotenv"
-	"os"
-	"path/filepath"
-	"fmt"
-	"github.com/ieee0824/getenv"
-	"io/ioutil"
-	"net"
-	"runtime"
-	"github.com/wirepair/gcd"
-	"os/exec"
-	"time"
-	"log"
 	"bytes"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"runtime"
+	"time"
+
+	"github.com/ieee0824/getenv"
+	"github.com/joho/godotenv"
+	"github.com/wirepair/gcd"
 )
 
 var (
-	USE_DOCKER_CHROME bool
-	DEFAULT_USER_AGENT string
+	USE_DOCKER_CHROME     bool
+	DEFAULT_USER_AGENT    string
 	DUMMY_RUN_SCRIPT_PATH string
-	CHROME_PATH string
-	USER_DIRECTORY string
-	HEADLESS bool
-	DELAY_TIME time.Duration
-	DEFAULT_PROXY_SERVER string
+	CHROME_PATH           string
+	USER_DIRECTORY        string
+	HEADLESS              bool
+	DELAY_TIME            time.Duration
+	DEFAULT_PROXY_SERVER  string
 )
 
-func init(){
+func init() {
 	current, err := filepath.Abs(".")
 	if err != nil {
 		panic(err)
@@ -56,7 +57,7 @@ func init(){
 	}
 }
 
-func generateDummyRunScript()error{
+func generateDummyRunScript() error {
 	f, err := ioutil.TempFile(os.TempDir(), "go_chrome")
 	if err != nil {
 		return err
@@ -87,34 +88,33 @@ func getPort() int {
 }
 
 type Chrome struct {
-	UserAgent string
-	userAgentGenerator *func(string)string
-	Mode string
-	remotePort *int
-	debugger *gcd.Gcd
-	chromeContainerID string
-	proxyServer *string
+	UserAgent          string
+	userAgentGenerator *func(string) string
+	Mode               string
+	remotePort         *int
+	debugger           *gcd.Gcd
+	chromeContainerID  string
+	proxyServer        *string
 }
 
-func New()*Chrome{
+func New() *Chrome {
 	var proxy = &DEFAULT_PROXY_SERVER
 	if DEFAULT_PROXY_SERVER == "" {
 		proxy = nil
 	}
 
-
 	return &Chrome{
-		UserAgent: DEFAULT_USER_AGENT,
-		Mode: "pc",
+		UserAgent:   DEFAULT_USER_AGENT,
+		Mode:        "pc",
 		proxyServer: proxy,
 	}
 }
 
-func (c *Chrome)SetUserAgentGenerator (f func(string)string) {
+func (c *Chrome) SetUserAgentGenerator(f func(string) string) {
 	c.userAgentGenerator = &f
 }
 
-func (c *Chrome)SetProxyServer (s string) {
+func (c *Chrome) SetProxyServer(s string) {
 	c.proxyServer = &s
 }
 
@@ -142,7 +142,7 @@ func (c *Chrome) startDockerChrome() error {
 	}
 	out, err := exec.Command(
 		"docker",
-		args...
+		args...,
 	).Output()
 	if err != nil {
 		return err
@@ -153,6 +153,9 @@ func (c *Chrome) startDockerChrome() error {
 
 func (c *Chrome) startChrome() error {
 	debugger := gcd.NewChromeDebugger()
+	if DELAY_TIME != 0 {
+		debugger.SetTimeout(DELAY_TIME)
+	}
 	if HEADLESS {
 		debugger.AddFlags([]string{"--headless"})
 	}
