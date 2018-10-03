@@ -244,14 +244,14 @@ func (c *Chrome) Get(u string) (reader *bytes.Reader, err error) {
 	}
 
 	page := target.Page
-	page.Navigate(u, "", "")
+	page.Navigate(u, "", "", "")
 	page.Enable()
 	time.Sleep(DELAY_TIME)
 
 	dom := target.DOM
 	dom.GetDocument(-1, true)
 
-	h, err := dom.GetOuterHTML(1)
+	h, err := dom.GetOuterHTML(1, 0, "")
 	if err != nil {
 		log.Println()
 		return nil, err
