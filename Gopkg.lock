@@ -2,16 +2,16 @@
 
 
 [[projects]]
-  branch = "master"
   name = "github.com/ieee0824/getenv"
   packages = ["."]
-  revision = "8f1e0ab5e7f09f2309a5b1d94833b42dfce9ede6"
+  revision = "c0967c2a6018ada0a7537084588ee1e5084b09ac"
+  version = "v0.2"
 
 [[projects]]
-  branch = "master"
   name = "github.com/joho/godotenv"
   packages = ["."]
-  revision = "c0b86d615e06d6fa5f869364d68f774ba49a86e3"
+  revision = "23d116af351c84513e1946b527c88823e476be13"
+  version = "v1.3.0"
 
 [[projects]]
   branch = "master"
@@ -21,17 +21,17 @@
     "gcdapi",
     "gcdmessage"
   ]
-  revision = "ff9f0ca5e31a19ee9862a6aa427f4019233c78ab"
+  revision = "3231a1db3b2236110c12850400000c9624168272"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["websocket"]
-  revision = "455220fa52c866a8aa14ff5e8cc68cde16b8395e"
+  revision = "f5e5bdd778241bfefa8627f7124c39cd6ad8d74f"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7f898482437114548d46b93dd01a8762065c10873466053c90479d4162e67187"
+  inputs-digest = "264241a5a13d8e901528c1401582f5645b5e8ec2b68856d3ad6e74b911f74b36"
   solver-name = "gps-cdcl"
   solver-version = 1
