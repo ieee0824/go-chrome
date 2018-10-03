@@ -11,12 +11,16 @@
   branch = "master"
   name = "github.com/joho/godotenv"
   packages = ["."]
-  revision = "325433c502d409f3c3dc820098fb0cfe38d98dc7"
+  revision = "c0b86d615e06d6fa5f869364d68f774ba49a86e3"
 
 [[projects]]
   branch = "master"
   name = "github.com/wirepair/gcd"
-  packages = [".","gcdapi","gcdmessage"]
+  packages = [
+    ".",
+    "gcdapi",
+    "gcdmessage"
+  ]
   revision = "ff9f0ca5e31a19ee9862a6aa427f4019233c78ab"
 
 [[projects]]
