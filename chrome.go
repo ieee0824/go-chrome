@@ -153,9 +153,7 @@ func (c *Chrome) startDockerChrome() error {
 
 func (c *Chrome) startChrome() error {
 	debugger := gcd.NewChromeDebugger()
-	if DELAY_TIME != 0 {
-		debugger.SetTimeout(DELAY_TIME)
-	}
+	debugger.SetTimeout(30)
 	if HEADLESS {
 		debugger.AddFlags([]string{"--headless"})
 	}
@@ -251,7 +249,7 @@ func (c *Chrome) Get(u string) (reader *bytes.Reader, err error) {
 	dom := target.DOM
 	dom.GetDocument(-1, true)
 
-	h, err := dom.GetOuterHTML(1, 0, "")
+	h, err := dom.GetOuterHTML(1, 1, "")
 	if err != nil {
 		log.Println()
 		return nil, err
