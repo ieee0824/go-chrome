@@ -162,7 +162,13 @@ func (c *Chrome) startChrome() error {
 		debugger.AddFlags([]string{fmt.Sprintf("--proxy-server=%v", *c.proxyServer)})
 	}
 
-	debugger.AddFlags([]string{"--disable-gpu", fmt.Sprintf("--user-agent=%s", c.getUserAgent())})
+	debugger.AddFlags([]string{
+		"--disable-gpu",
+		fmt.Sprintf("--user-agent=%s",
+			c.getUserAgent()),
+		"--no-sandbox",
+		"--disable-setuid-sandbox",
+	})
 	port := getPort()
 	c.remotePort = &port
 
